@@ -1,0 +1,13 @@
+import { EventEmitter } from "events";
+
+/**
+ * An event emitter class that MUST be shared between
+ * the workers and the client
+ */
+export class TkickEventEmitter extends EventEmitter {
+    constructor() {
+        super();
+    }
+}
+
+export const tkickEventEmitter = new TkickEventEmitter();

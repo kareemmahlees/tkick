@@ -1,0 +1,15 @@
+version: "3"
+
+services:
+    db:
+        container_name: tkick_redis
+        restart: always
+        image: redis
+        ports:
+            - "63790:6379"
+    test_db:
+        container_name: tkick_redis_test
+        restart: always
+        image: redis
+        ports:
+            - "63791:6379"
