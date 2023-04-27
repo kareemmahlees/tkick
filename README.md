@@ -72,9 +72,9 @@ The original author of the project, [Ben Yeh](https://github.com/ocowchun) has n
 
 # Todo
 
-<input type="checkbox" disabled> Implement a multithreaded workers system</input>
+-   [ ] Implement a multithreaded workers system
 
-<input type="checkbox" disabled>Add scheduling jobs</input>
+-   [x] Add scheduling jobs
 
 <style>
     img{
