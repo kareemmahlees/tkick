@@ -76,7 +76,7 @@ The original author of the project, [Ben Yeh](https://github.com/ocowchun) has n
 
 -   [x] Add scheduling jobs
 
-<style>
+<!-- <style>
     img{
         border-radius:1rem;
     }
@@ -94,4 +94,4 @@ The original author of the project, [Ben Yeh](https://github.com/ocowchun) has n
     .blue{
         color:#0563a6;
     }
-</style>
+</style> -->
