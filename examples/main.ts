@@ -39,6 +39,9 @@ async function main() {
     client.enqueueAt("foo", firstJob);
     client.enqueueAt("bar", secondJob);
     client.enqueueAt("baz", thirdJob);
+
+    // schedule it
+    client.schedule(firstJob, 5);
 }
 
 main();

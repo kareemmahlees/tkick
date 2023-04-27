@@ -8,11 +8,11 @@ export default class Job {
     id: string;
     name: string;
     queue?: string;
+    scheduledTime?: number;
     jobFunction: CallableFunction;
     constructor(name: string, jobFunction: CallableFunction) {
         this.id = uuidv4();
         this.name = name;
-        this.queue = undefined;
         this.jobFunction = jobFunction;
     }
 }

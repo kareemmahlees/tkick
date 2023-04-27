@@ -6,10 +6,7 @@
     "extends": "standard-with-typescript",
     "overrides": [],
     "parserOptions": {
-        "ecmaVersion": "latest",
-        "project": "./tsconfig.json"
+        "ecmaVersion": "latest"
     },
-    "rules": {
-        "indent": ["error", 4]
-    }
+    "rules": {}
 }

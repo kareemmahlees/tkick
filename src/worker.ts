@@ -16,27 +16,46 @@ export default class TkickWorker implements ITkickWorker {
 
     registerListener() {
         this.eventEmitter.addListener("job:created", (queueName) => {
-            this.executeJob(queueName);
+            this.executeQueuedJob(queueName);
+        });
+        this.eventEmitter.addListener("job:scheduleUp", (job) => {
+            this.executeScheduledJob(job);
         });
     }
 
-    async executeJob(queueName: string): Promise<void | any> {
+    async executeQueuedJob(queueName: string): Promise<void | any> {
         const job = await this.dequeFrom(queueName);
         if (job) {
-            const { name, jobFunction } = job;
-
-            const functionDefinition = new Function("return " + jobFunction)();
-            const functionExecutionReturn = functionDefinition();
-            success(
-                `Job "${name}" completed with result (${functionExecutionReturn})`
-            );
-            return functionExecutionReturn;
+            const result = await this.executeJob(job);
+            success(`Job "${job.name}" completed with result (${result})`);
         } else {
             error("Error when dequeuing job");
         }
     }
 
+    async executeScheduledJob(job: string) {
+        await this.removeJobFromSchedule(job);
+        const jobObj: Job = JSON.parse(job);
+        const result = await this.executeJob(jobObj);
+        const scheduleTime = new Date(
+            jobObj.scheduledTime as number
+        ).toUTCString();
+        success(
+            `Job ${jobObj.name}, scheduled at ${scheduleTime}, completed with result (${result})`
+        );
+    }
+
+    async executeJob(job: Job) {
+        const functionDefinition = new Function("return " + job.jobFunction)();
+        const functionExecutionReturn = functionDefinition();
+        return functionExecutionReturn;
+    }
+
     async dequeFrom(queueName: string): Promise<Job | void> {
         return await this.queue.deque(queueName);
+    }
+
+    async removeJobFromSchedule(job: string) {
+        return this.queue.deSchedule(job);
     }
 }

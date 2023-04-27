@@ -2,14 +2,18 @@ import Job from "./job";
 
 export declare interface TkickClient {
     enqueueAt(queueName: string, job: Job): void;
+    schedule(job: Job, scheduleTimeInSeconds: number): void;
 }
 
 export declare interface TkickQueueManager {
-    enqueue(name: string, job: Job): void;
-    deque(name: string): Promise<Job | void>;
+    enqueue(queueName: string, job: Job): void;
+    deque(queueName: string): Promise<Job | void>;
+    schedule(job: Job, scheduleTimeInSeconds: number): void;
+    deSchedule(job: string): void;
+    getScheduledJobs(): Promise<string[]>;
 }
 
 export declare interface ITkickWorker {
-    executeJob(queueName: string): void;
+    executeQueuedJob(queueName: string): void;
     dequeFrom(queueName: string): void;
 }
