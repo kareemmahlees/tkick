@@ -17,4 +17,8 @@ export default class TkickRedisClient implements TkickClient {
         this.queue.enqueue(queueName, job);
         this.eventEmitter.emit("job:created", queueName);
     }
+
+    async schedule(job: Job, scheduleTimeInSeconds: number): Promise<void> {
+        this.queue.schedule(job, scheduleTimeInSeconds);
+    }
 }
