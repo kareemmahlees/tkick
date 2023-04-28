@@ -3,6 +3,11 @@ import { RedisClient } from "./types";
 import Job from "./job";
 import { error, info } from "./logging";
 
+/**
+ * A Queue manager designed for redis, executes some actions
+ * such as: enqueuing, dequeuing, scheduling, etc
+ * @implements TkickQueueManager
+ */
 export default class TkickRedisQueueManager implements TkickQueueManager {
     redisClient: RedisClient;
     schedulingQueue = "scheduledSet";
@@ -70,6 +75,10 @@ export default class TkickRedisQueueManager implements TkickQueueManager {
         return status;
     }
 
+    /**
+     *
+     * @returns all the jobs present in the scheduling queue
+     */
     async getScheduledJobs(): Promise<string[]> {
         return await this.redisClient.zRangeByScore(
             this.schedulingQueue,
