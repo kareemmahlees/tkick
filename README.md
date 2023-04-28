@@ -26,6 +26,7 @@ before we jump into how **tKick** works we first need to explore so terminology 
 | Job    | An object that stores information about the the function you want to store ( id,name,queue,job function definition)                                |
 | Queue  | Like any queue in the real world, it's a line of objects that are waiting to be served, typically a queue have an `enqueue` and a `dequeue` method |
 | Worker | An object that is responsible for grepping jobs from the queue and executing them                                                                  |
+| Poller | An object that is continuously polling the database and checking whether a scheduled job time is up or not                                         |
 | Client | The interface through which you can interact with the system, it encapsulates some low level functionality                                         |
 
 With that out of the way, let's now explore how **tKick** works.
