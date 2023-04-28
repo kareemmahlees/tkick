@@ -6,6 +6,10 @@ import TkickRedisQueueManager from "./queue";
 import { RedisClient } from "./types";
 import { error, success } from "./logging";
 
+/**
+ * A Worker is responsible for executing the enqueued/scheduled jobs
+ * @implements ITkickWorker
+ */
 export default class TkickWorker implements ITkickWorker {
     eventEmitter: EventEmitter;
     queue: TkickQueueManager;

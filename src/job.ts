@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from "uuid";
 
 /**
- * A class that holds the information of the job to enqueue
+ * A class that holds the information of the job to enqueue/schedule
  * with the client
  */
 export default class Job {

@@ -5,6 +5,12 @@ import Job from "./job";
 import TkickRedisQueueManager from "./queue";
 import { RedisClient } from "./types";
 
+/**
+ * The Client is an abstraction on top of the Queue object
+ * it basically handles all the execution to the Queue
+ * but it provides a nicer interface on top of it
+ * @implements TkickClient
+ */
 export default class TkickRedisClient implements TkickClient {
     queue: TkickQueueManager;
     eventEmitter: EventEmitter;

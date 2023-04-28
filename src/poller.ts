@@ -5,6 +5,11 @@ import { tkickEventEmitter } from "./eventEmitter";
 import TkickRedisQueueManager from "./queue";
 import Job from "./job";
 
+/**
+ * Poller is responsible for continuously checking if
+ * a scheduled job's time is up.
+ * It has a single method
+ */
 export default class TkickPoller {
     eventEmitter: EventEmitter;
     queue: TkickQueueManager;
