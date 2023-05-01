@@ -21,23 +21,34 @@ The next ground-breaking, earth-shaking, revolutionary background job system.
 
 before we jump into how **tKick** works we first need to explore so terminology so we can grasp a better understanding of the topic:
 
-| Term   | Definition                                                                                                                                         |
-| ------ | -------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Job    | An object that stores information about the the function you want to store ( id,name,queue,job function definition)                                |
-| Queue  | Like any queue in the real world, it's a line of objects that are waiting to be served, typically a queue have an `enqueue` and a `dequeue` method |
-| Worker | An object that is responsible for grepping jobs from the queue and executing them                                                                  |
-| Poller | An object that is continuously polling the database and checking whether a scheduled job time is up or not                                         |
-| Client | The interface through which you can interact with the system, it encapsulates some low level functionality                                         |
+| Term          | Definition                                                                                                                                                                |
+| ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Job           | An object that stores information about the the function you want to store ( id,name,queue,job function definition)                                                       |
+| Queue         | Like any queue in the real world, it's a line of objects that are waiting to be served, typically a queue have an `enqueue` and a `dequeue` method                        |
+| Worker        | An object that is responsible for executing queued and scheduled tasks                                                                                                    |
+| Load Balancer | It is the portal that orchestrates the interaction between the Poller,QueueManager and the Workers,it is also responsible for load balancing the work between the workers |
+| Poller        | An object that is continuously polling the database and checking whether a scheduled job time is up or not                                                                |
+| Client        | The interface through which you can interact with the system, it encapsulates some low level functionality                                                                |
 
 With that out of the way, let's now explore how **tKick** works.
 
-![illustration](./docs/illustration.png)
+![illustration](./docs/load_balancer_update.png)
 
--   When you ask the client to enqueue a job, it sends a request the the underlying queue manager with the provided job.
+### Queueing
+
+-   When you ask the client to enqueue a job, it sends a request to the underlying queue manager with the provided job.
 -   The Queue Manger sends a request for the redis client to enqueue the job in redis queue.
 -   An event is emitted carrying some information about the job.
--   On the other side, the worker has subscribed to the "job created" event.
--   Once the worker receives the job information, attached to the event, it begins dequeueing the job from redis queue, executing it and returning it's value.
+
+### Scheduling
+
+-   When you ask the client to schedule a job, it send a request to the underlying Queue Manager with the provided job
+-   the Queue Manager enqueues the job in a specific redis queue for scheduled jobs
+-   The Poller is continuously polling redis to check if a job's execution time is up, if true then and event is emitted with the job.
+
+The Missing piece in previous two operations is executing the jobs, this is the responsibility of the event emitter, it has subscribed for both queueing and scheduling events and delegates the work to any of the **Free** workers.
+
+It also tracks the state of each worker and depending on whether it is busy or not, it decides either to give the job to the worker or hand it to another worker.
 
 Interfaces are used extensively here to allow using other queues or data storages such as PostgreSQL or MySQL.
 
@@ -73,7 +84,7 @@ The original author of the project, [Ben Yeh](https://github.com/ocowchun) has n
 
 # Todo
 
--   [ ] Implement a multithreaded workers system
+-   [x] Implement a multi workers system
 
 -   [x] Add scheduling jobs
 
