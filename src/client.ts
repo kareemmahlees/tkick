@@ -1,9 +1,9 @@
-import { TkickClient, TkickQueueManager } from "./interfaces";
+import type { TkickClient, TkickQueueManager } from "./interfaces";
 import { tkickEventEmitter } from "./eventEmitter";
-import EventEmitter from "events";
-import Job from "./job";
+import type EventEmitter from "events";
+import type Job from "./job";
 import TkickRedisQueueManager from "./queue";
-import { RedisClient } from "./types";
+import type { RedisClient } from "./types";
 
 /**
  * The Client is an abstraction on top of the Queue object

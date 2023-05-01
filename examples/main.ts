@@ -10,13 +10,15 @@ const redisClient = createClient({
     },
 });
 
-async function main() {
+async function main(): Promise<void> {
     // connect the redis client
-    redisClient.on("error", (err) => console.log("Redis Client Error", err));
+    redisClient.on("error", (err) => {
+        console.log("Redis Client Error", err);
+    });
     await redisClient.connect();
 
     // start the server
-    const server = TkickServer(redisClient);
+    const server = await TkickServer(redisClient);
     server.listen(3001, () => {
         console.log(`TkickServer is listening on port 3001`);
     });
@@ -36,12 +38,15 @@ async function main() {
     });
 
     // enqueue it
-    client.enqueueAt("foo", firstJob);
-    client.enqueueAt("bar", secondJob);
-    client.enqueueAt("baz", thirdJob);
+    await client.enqueueAt("foo", firstJob);
+    await client.enqueueAt("bar", secondJob);
+    await client.enqueueAt("baz", thirdJob);
 
     // schedule it
-    client.schedule(firstJob, 5);
+    await client.schedule(firstJob, 5);
+    await client.schedule(secondJob, 5);
+    await client.schedule(thirdJob, 5);
 }
 
+// eslint-disable-next-line @typescript-eslint/no-floating-promises
 main();

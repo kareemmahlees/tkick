@@ -5,10 +5,6 @@ import { EventEmitter } from "events";
  * the workers and the client
  * @extends EventEmitter
  */
-export class TkickEventEmitter extends EventEmitter {
-    constructor() {
-        super();
-    }
-}
+export class TkickEventEmitter extends EventEmitter {}
 
 export const tkickEventEmitter = new TkickEventEmitter();

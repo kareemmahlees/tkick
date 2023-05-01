@@ -3,10 +3,29 @@
         "browser": true,
         "es2021": true
     },
-    "extends": "standard-with-typescript",
+    "extends": ["standard-with-typescript", "prettier"],
     "overrides": [],
     "parserOptions": {
-        "ecmaVersion": "latest"
+        "ecmaVersion": "latest",
+        "project": "./tsconfig.json"
     },
-    "rules": {}
+    "rules": {
+        "indent": "off",
+        "@typescript-eslint/no-misused-promises": [
+            "error",
+            {
+                "checksVoidReturn": false
+            }
+        ],
+        "@typescript-eslint/strict-boolean-expressions": "off",
+        "@typescript-eslint/consistent-type-definitions": "off",
+        "@typescript-eslint/restrict-template-expressions": [
+            "error",
+            {
+                "allowAny": true
+            }
+        ],
+        "@typescript-eslint/no-implied-eval": "off",
+        "no-new-func": "off"
+    }
 }
