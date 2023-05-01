@@ -10,7 +10,7 @@
     },
     "scripts": {
         "dev": "docker compose up db -d && nodemon ./examples/main.ts",
-        "test": "docker compose up test_db -d && jest  --silent --verbose --runInBand ./tests/*",
+        "test": "docker compose up test_db -d && jest  --silent --verbose --runInBand",
         "lint": "eslint --ext .ts .",
         "format": "prettier --check --write .",
         "prepare": "husky install"
