@@ -5,6 +5,10 @@ import { tkickEventEmitter } from "./eventEmitter";
 import { error } from "./logging";
 import TkickWorker from "./worker";
 
+/**
+ * LoadBalancer responsible for responding to events emitted from
+ * queued/scheduled jobs and diverge requests to the **Free** workers
+ */
 export default class LoadBalancer {
     workersNum: number;
     state: LoadBalancerState[] = [];
