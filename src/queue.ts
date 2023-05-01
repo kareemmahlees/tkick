@@ -1,6 +1,6 @@
-import { TkickQueueManager } from "./interfaces";
-import { RedisClient } from "./types";
-import Job from "./job";
+import type { TkickQueueManager } from "./interfaces";
+import type { RedisClient } from "./types";
+import type Job from "./job";
 import { error, info } from "./logging";
 
 /**
@@ -36,16 +36,14 @@ export default class TkickRedisQueueManager implements TkickQueueManager {
         const jobDefinition = this.prepareJobDefinition(job, queueName);
         await this.redisClient.LPUSH(queueName, jobDefinition);
         info(`"${job.name}" queued`);
-        return;
     }
 
-    async deque(queueName: string): Promise<Job | void> {
+    async deque(queueName: string): Promise<Job | undefined> {
         const dequedJob = await this.redisClient.RPOP(queueName);
         if (dequedJob) {
             return JSON.parse(dequedJob);
         }
         error(`Can't find queue with name ${queueName}`);
-        return;
     }
 
     async schedule(job: Job, scheduleTimeInSeconds: number): Promise<void> {
@@ -67,7 +65,7 @@ export default class TkickRedisQueueManager implements TkickQueueManager {
         info(`"${job.name}" scheduled`);
     }
 
-    async deSchedule(job: string) {
+    async deSchedule(job: string): Promise<number> {
         const status = await this.redisClient.zRem(this.schedulingQueue, job);
         if (status === 0) {
             error("Error when deScheduling job");

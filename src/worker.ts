@@ -1,9 +1,9 @@
-import EventEmitter from "events";
+import type EventEmitter from "events";
 import { tkickEventEmitter } from "./eventEmitter";
-import { TkickQueueManager, ITkickWorker } from "./interfaces";
-import Job from "./job";
+import type { TkickQueueManager, ITkickWorker } from "./interfaces";
+import type Job from "./job";
 import TkickRedisQueueManager from "./queue";
-import { RedisClient } from "./types";
+import type { RedisClient } from "./types";
 import { error, success } from "./logging";
 
 /**
@@ -18,16 +18,7 @@ export default class TkickWorker implements ITkickWorker {
         this.queue = new TkickRedisQueueManager(redisClient);
     }
 
-    registerListener() {
-        this.eventEmitter.addListener("job:created", (queueName) => {
-            this.executeQueuedJob(queueName);
-        });
-        this.eventEmitter.addListener("job:scheduleUp", (job) => {
-            this.executeScheduledJob(job);
-        });
-    }
-
-    async executeQueuedJob(queueName: string): Promise<void | any> {
+    async executeQueuedJob(queueName: string): Promise<undefined | any> {
         const job = await this.dequeFrom(queueName);
         if (job) {
             const result = await this.executeJob(job);
@@ -37,7 +28,7 @@ export default class TkickWorker implements ITkickWorker {
         }
     }
 
-    async executeScheduledJob(job: string) {
+    async executeScheduledJob(job: string): Promise<void> {
         await this.removeJobFromSchedule(job);
         const jobObj: Job = JSON.parse(job);
         const result = await this.executeJob(jobObj);
@@ -49,17 +40,18 @@ export default class TkickWorker implements ITkickWorker {
         );
     }
 
-    async executeJob(job: Job) {
+    async executeJob(job: Job): Promise<any> {
+        // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
         const functionDefinition = new Function("return " + job.jobFunction)();
         const functionExecutionReturn = functionDefinition();
         return functionExecutionReturn;
     }
 
-    async dequeFrom(queueName: string): Promise<Job | void> {
+    async dequeFrom(queueName: string): Promise<Job | undefined> {
         return await this.queue.deque(queueName);
     }
 
-    async removeJobFromSchedule(job: string) {
-        return this.queue.deSchedule(job);
+    async removeJobFromSchedule(job: string): Promise<number> {
+        return await this.queue.deSchedule(job);
     }
 }

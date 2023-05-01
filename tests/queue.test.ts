@@ -1,8 +1,8 @@
 import { createClient } from "redis";
 import TkickRedisQueueManager from "../src/queue";
 import Job from "../src/job";
-import { RedisClient } from "../src/types";
-import { TkickQueueManager } from "../src/interfaces";
+import type { RedisClient } from "../src/types";
+import type { TkickQueueManager } from "../src/interfaces";
 
 let redisClient: RedisClient;
 let queue: TkickQueueManager;
@@ -22,7 +22,9 @@ beforeAll(async () => {
     });
     redisQueue = "queue";
 
-    redisClient.on("error", (err) => console.log("Redis Client Error", err));
+    redisClient.on("error", (err) => {
+        console.log("Redis Client Error", err);
+    });
     await redisClient.connect();
 });
 

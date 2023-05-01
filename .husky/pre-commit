@@ -4,3 +4,5 @@
 export FORCE_COLOR=3
 
 npm test
+npx lint-staged
+npm run lint

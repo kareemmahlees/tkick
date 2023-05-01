@@ -1,9 +1,9 @@
-import EventEmitter from "events";
-import { TkickQueueManager } from "./interfaces";
-import { RedisClient } from "./types";
+import type EventEmitter from "events";
+import type { TkickQueueManager } from "./interfaces";
+import type { RedisClient } from "./types";
 import { tkickEventEmitter } from "./eventEmitter";
 import TkickRedisQueueManager from "./queue";
-import Job from "./job";
+import type Job from "./job";
 
 /**
  * Poller is responsible for continuously checking if
@@ -18,7 +18,7 @@ export default class TkickPoller {
         this.queue = new TkickRedisQueueManager(redisClient);
     }
 
-    async poll() {
+    async poll(): Promise<void> {
         setInterval(async () => {
             const scheduledJobs = await this.queue.getScheduledJobs();
             scheduledJobs.forEach((job) => {
