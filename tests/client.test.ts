@@ -3,6 +3,7 @@ import Job from "../src/job";
 import type { RedisClient } from "../src/types";
 import type { TkickClient } from "../src/interfaces";
 import TkickRedisClient from "../src/client";
+import { beforeAll, afterEach, afterAll, describe, it, expect } from "vitest";
 
 let redisClient: RedisClient;
 let tkickClient: TkickClient;
@@ -37,7 +38,7 @@ afterAll(async () => {
 });
 
 describe("Client functionality", () => {
-    test("should enqueue job", async () => {
+    it("should enqueue job", async () => {
         tkickClient.enqueueAt(redisQueue, job);
         tkickClient.enqueueAt(redisQueue, job);
         tkickClient.enqueueAt(redisQueue, job);

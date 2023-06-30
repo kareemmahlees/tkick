@@ -3,6 +3,7 @@ import TkickRedisQueueManager from "../src/queue";
 import Job from "../src/job";
 import type { RedisClient } from "../src/types";
 import type { TkickQueueManager } from "../src/interfaces";
+import { beforeAll, afterEach, afterAll, describe, it, expect } from "vitest";
 
 let redisClient: RedisClient;
 let queue: TkickQueueManager;
@@ -37,7 +38,7 @@ afterAll(async () => {
 });
 
 describe("Queue functionality", () => {
-    test("should enqueue job and increase length of queue", async () => {
+    it("should enqueue job and increase length of queue", async () => {
         queue.enqueue(redisQueue, job);
         queue.enqueue(redisQueue, job);
         queue.enqueue(redisQueue, job);
@@ -45,7 +46,7 @@ describe("Queue functionality", () => {
         expect(queueLength).toBe(3);
     });
 
-    test("should dequeue job that matches the enqueued job", async () => {
+    it("should dequeue job that matches the enqueued job", async () => {
         type DequeuedJob = {
             id: string;
             name: string;
